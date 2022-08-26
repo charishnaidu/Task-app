@@ -1,4 +1,3 @@
-const { serialize } = require('bson')
 const jwt = require('jsonwebtoken')
 const User = require('../models/user')
 
@@ -14,7 +13,7 @@ const auth = async(req, res, next) => {
         req.token = token
         next()
     }catch(e){
-        res.status(401).send({error: 'Please authenticate'})
+        res.status(401).send({error: 'Please authenticate..'})
     }
 }
 
