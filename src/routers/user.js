@@ -2,6 +2,7 @@ const express = require('express')
 const User = require('../models/user')
 const auth = require('../middleware/auth')
 const multer = require('multer')
+const { TokenExpiredError } = require('jsonwebtoken')
 
 const router = new express.Router()
 
@@ -101,6 +102,20 @@ router.delete('/users/me/avatar', auth, async (req, res)=>{
     req.user.avatar = undefined
     await req.user.save()
     res.send(req.user)
+})
+
+router.get('/users/:id/avatar', async(req, res) => {
+    try{
+        const user = await User.findById(req.params.id)
+
+        if(!user || !user.avatar){
+            throw new Error()
+        }
+        res.set('content-type', 'image/jpg')
+        res.send(user.avatar)
+    }catch(e){
+        res.status(404).send(e)
+    }
 })
 
 module.exports = router
